@@ -14,8 +14,23 @@ public class DemoController {
         return modelAndView;
     }
 	
-	@GetMapping("/admin/home")
-	public String test(){
+	@GetMapping("/home")
+	public String home(){
         return "index";
+    }
+	
+	@GetMapping("/admin")
+	public String admin(){
+        return "admin";
+    }
+	
+	@GetMapping("/manager")
+	public String manager(){
+        return "manager";
+    }
+	
+	@GetMapping("/access-denied")
+	public String accessDenied(){
+        return "access-denied";
     }
 }
