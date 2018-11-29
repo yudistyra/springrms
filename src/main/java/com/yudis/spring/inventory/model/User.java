@@ -28,7 +28,7 @@ public class User {
 	@NotEmpty(message = "Please provide a Username")
 	private String username;
 	@Length(min = 5, message = "*Your password must have at least 5 characters")
-	@NotEmpty(message = "Please provide a Username")
+	@NotEmpty(message = "Please provide a Password")
 	private String password;
 	@Email(message = "*Please provide a valid Email")
 	@NotEmpty(message = "*Please provide an email")

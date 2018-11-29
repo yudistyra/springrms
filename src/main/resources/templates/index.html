@@ -7,9 +7,9 @@
 <body>
 	Hello,
 	<br /> Logged user:
-	<span sec:authentication="name">Bob</span> Roles:
-	<span sec:authentication="principal.authorities">[ROLE_USER,
-		ROLE_ADMIN]</span>
+	<span sec:authentication="principal.username">Bob</span> Roles:
+	<!-- <span sec:authentication="principal.authorities">[ROLE_USER,
+		ROLE_ADMIN]</span> -->
 
 	<p>
 		Manager Menu : <a href="manager.html" th:href="@{/manager}">Manager</a>

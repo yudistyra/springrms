@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Spring Inventory</title>
+    <title>Bubbly - Boootstrap 4 Admin template by Bootstrapious.com</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -22,7 +22,7 @@
     <!-- Favicon-->
     <link rel="shortcut icon" th:href="@{/assets/img/favicon.png?3}">
     <!-- Tweaks for older IEs--><!--[if lt IE 9]>
-     	<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
         <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
   </head>
   <body>
@@ -34,38 +34,50 @@
           </div>
           <div class="col-lg-5 px-lg-4">
             <h1 class="text-base text-primary text-uppercase mb-4">Spring Inventory Application</h1>
-            <h2 class="mb-4">Welcome back!</h2>
-            <p class="text-muted">Manage your own product and warehouse in modern way.</p>
-            <form id="loginForm" th:action="@{/login}" method="POST" class="mt-4">
-              <div class="form-group mb-4">
-                <input type="text" name="username" placeholder="Username" class="form-control border-0 shadow form-control-lg">
-              </div>
-              <div class="form-group mb-4">
-                <input type="password" name="password" placeholder="Password" class="form-control border-0 shadow form-control-lg text-violet">
-              </div>
-              <div class="form-group mb-4">
-                <div class="custom-control custom-checkbox">
-                  <input id="customCheck1" type="checkbox" checked class="custom-control-input">
-                  <label for="customCheck1" class="custom-control-label">Remember Me</label>
-                </div>
-              </div>
-              <div class="form-group mb-4" th:if="${param.error}"
-				     th:with="errorMsg=${session['SPRING_SECURITY_LAST_EXCEPTION'].message}">
-				    <p style="font-size: 20; color: #FF1C19;" th:text="${errorMsg}">Wrong input!</p>
-			  </div>
-              <div class="form-group mb-4" th:if="${param.logout}">
-                <p style="font-size: 20; color: #FF1C19;">You successfully logged out</p>
-              </div>
-              <button type="submit" class="btn btn-primary shadow px-5">Log in</button>&nbsp;
-              <a href="register.html" th:href="@{/register}" role="button" class="btn btn-danger">Sign Up</a>
-            </form>
+            <h2 class="mb-4">Registration Form!</h2>
+            <p class="text-muted">Please provide a valid information.</p>
+            <form autocomplete="off" action="#" th:action="@{/register}"
+				th:object="${user}" method="post" class="form-horizontal"
+				role="form">
+				<div class="form-group mb-4">
+					<label th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
+							class="validation-message"></label>
+					<input type="text" th:field="*{username}" placeholder="Username"
+							class="form-control" /> 
+				</div>
+				<div class="form-group mb-4">
+						<input type="password" th:field="*{password}"
+							placeholder="Password" class="form-control" /> <label
+							th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+							class="validation-message"></label>
+				</div>
+				
+				<div class="form-group mb-4">
+					<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+							class="validation-message"></label>
+					<input type="text" th:field="*{name}" placeholder="Name"
+							class="form-control" /> 
+				</div>
+
+				<div class="form-group mb-4">
+					<input type="text" th:field="*{email}" placeholder="Email"
+						class="form-control" /> <label
+						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+						class="validation-message"></label>
+				</div>
+
+				<button type="submit" class="btn btn-danger shadow px-5">Register</button>
+				<a href="register.html" th:href="@{/login}" role="button" class="btn btn-warning">Login Page</a>
+				
+				<span th:utext="${successMessage}"></span>
+			</form>
           </div>
         </div>
         <p class="mt-5 mb-0 text-gray-400 text-center">Design by <a href="https://bootstrapious.com/admin-templates" class="external text-gray-400">Bootstrapious</a> & Your company</p>
         <!-- Please do not remove the backlink to us unless you support further theme's development at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)                 -->
       </div>
     </div>
-
+    
     <!-- JavaScript files-->
     <script th:src="@{/assets/vendor/jquery/jquery.min.js}"></script>
     <script th:src="@{/assets/vendor/popper.js/umd/popper.min.js}"> </script>

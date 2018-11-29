@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import com.yudis.spring.inventory.model.Role;
 
-@Repository()
+@Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
 	Role findByName(String name);
 }
