@@ -16,25 +16,25 @@ public class UserService {
 	private UserRepository userRepository;
 	@Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-	private User saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setActive(1);
-        return userRepository.save(user);
-    }
 	
 	public User findUserByUsername(String username) {
         return userRepository.findByUsername(username);
-    }    
+    }
+	
+	public User findUserById(Long id) {
+		return userRepository.findById(id).orElse(null);
+	}
     
-    public String register(User user) {
+    public String create(User user) {
     	User userExist = findUserByUsername(user.getUsername());
     	
     	if(userExist != null) {
     		return "There is already a user registered with the username provided";
     	}
     	else {
-    		User newuser = saveUser(user);
+    		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+            user.setActive(0);
+    		User newuser = userRepository.save(user);
     		if(newuser != null) {
     			return "success";
     		}
@@ -42,9 +42,12 @@ public class UserService {
     	
     	return "failed";
     }
-    
+        
     public List<User> findAllUserByActive(int active) {
-    	return userRepository.findAllByActive(active);
+    	if(active == 0 || active == 1)
+    		return userRepository.findAllByActive(active);
+    	
+    	return null;
     }
     
     public List<User> findAllUser() {

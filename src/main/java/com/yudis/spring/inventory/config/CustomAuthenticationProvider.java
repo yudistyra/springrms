@@ -34,7 +34,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	    User user = userService.findUserByUsername(username);
 	    
 	    if (user == null) {
-	        throw new BadCredentialsException("Bad Credentials");
+	        throw new BadCredentialsException("Bad Credentialsssss");
 	    }
 	    if (user.getActive() == 0) {
 	        throw new DisabledException("Username not active");

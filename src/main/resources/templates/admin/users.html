@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{base}" th:with="currentPage='users'">
+<head>
+<title>Users</title>
+<th:block layout:fragment="customcss">
+	<!-- DataTables -->
+	<link rel="stylesheet"
+		th:href="@{/assets/vendor/datatables/datatables.min.css}">
+</th:block>
+</head>
+<body>
+	<div layout:fragment="content">
+		<!-- User List -->
+		<div class="col-lg-12 mb-5">
+			<div class="card">
+				<div class="card-header">
+					<i class="fas fa-users"></i>&nbsp;&nbsp;<span
+						class="text-uppercase mb-0">Users</span>
+				</div>
+				<div class="card-body">
+					<table id="usersTable" class="table">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<th>Username</th>
+								<th>Email</th>
+								<th>Fullname</th>
+								<th>Role</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="user: ${users}">
+                                    <td th:text="${user.id}"></td>
+                                    <td th:text="${user.username}"></td>
+                                    <td th:text="${user.email}"></td>
+                                    <td th:text="${user.name}"></td>
+                                    <td th:text="${user.role} ? ${user.role.name} : 'Not In Group'"></td>
+                                    <td th:switch="${user.active}">
+									    <span th:case="'0'" class="badge badge-danger">Inactive</span>
+    									<span th:case="'1'" class="badge badge-success">Active</span>
+									</td>
+                                    <td>
+                                        <a th:href="@{/admin/users/edit/{id}(id=${user.id})}" role="button" class="badge badge-warning">
+                                        	<i class="fas fa-user-edit p-1"></i></a>
+                                        <a th:href="@{/admin/users/delete/{id}(id=${user.id})}" class="badge badge-danger">
+                                            <i class="fas fa-user-times p-1"></i></a>
+                                    </td>
+                                </tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- End User List -->
+	</div>
+
+	<th:block layout:fragment="scripts">
+		<!-- DataTables -->
+		<script
+			th:src="@{/assets/vendor/datatables/datatables.min.js}"></script>
+		<script>
+			$(function() {
+				$('#usersTable').DataTable();
+				
+				// datatable initialize and config
+		        /** table = $('#usersTable').DataTable({
+		            "processing": true, //Feature control the processing indicator.
+		            "serverSide": true, //Feature control DataTables' server-side processing mode.
+		            // Load data for the table's content from an Ajax source
+		            "ajax": "/admin/users/data",
+		            "pageLength": 10,
+		            // set columns, shows in the datatables inside <tbody> tag
+		            "columns": [
+		                {
+		                    data: 'id',
+		                    name: 'id',
+		                    render: function (data, type, row, meta) {
+		                        return meta.row + meta.settings._iDisplayStart + 1;
+		                    }
+					    },
+		                {
+		                    data: 'username',
+		                    name: 'username'
+		                },
+		                {
+		                    data: 'email',
+		                    name: 'email'
+		                },
+		                {
+		                    data: 'name',
+		                    name: 'name',
+		                },
+		            ],
+		            //Set column definition initialisation properties.
+		            "columnDefs": [
+		                {
+		                    "targets": [1,2], //first column / numbering column
+		                    "orderable": false, //set not orderable
+		                },
+		            ],
+		        });*/
+			})
+		</script>
+	</th:block>
+</body>
+</html>
