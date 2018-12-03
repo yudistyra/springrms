@@ -33,7 +33,7 @@ public class UserService {
     	}
     	else {
     		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.setActive(0);
+            user.setActive(false);
     		User newuser = userRepository.save(user);
     		if(newuser != null) {
     			return "success";
@@ -43,14 +43,26 @@ public class UserService {
     	return "failed";
     }
         
-    public List<User> findAllUserByActive(int active) {
-    	if(active == 0 || active == 1)
-    		return userRepository.findAllByActive(active);
-    	
-    	return null;
+    public List<User> findAllUserByActive(boolean active) {
+    	return userRepository.findAllByActive(active);
     }
     
     public List<User> findAllUser() {
     	return userRepository.findAll();
     }
+
+	public String update(User user) {
+		User userUpdate = userRepository.findById(user.getId()).orElse(null);
+		
+		if(userUpdate != null) {
+			userUpdate.setActive(user.isActive());
+			userUpdate.setRole(user.getRole());
+			
+			User resultUser = userRepository.save(userUpdate);
+			
+			if(resultUser != null) return "success";
+		}
+			
+		return "failed";
+	}
 }

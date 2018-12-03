@@ -1,6 +1,6 @@
 package com.yudis.spring.inventory.controller;
 
-import java.util.List;
+import java.util.List; 
 
 import javax.validation.Valid;
 
@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.yudis.spring.inventory.model.Role;
 import com.yudis.spring.inventory.model.User;
+import com.yudis.spring.inventory.service.ProductService;
 import com.yudis.spring.inventory.service.RoleService;
 import com.yudis.spring.inventory.service.UserService;
 
@@ -25,22 +26,21 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	@Autowired
 	private RoleService roleService;
+	@Autowired
+	private ProductService productService;
 	
 	@GetMapping("/login")
-	public ModelAndView login(){
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
-        return modelAndView;
+	public String login(){
+        return "login";
     }
 	
 	@GetMapping("/register")
-	public ModelAndView register() {
-		ModelAndView modelAndView = new ModelAndView();
+	public String register(Model model) {
         User user = new User();
-        modelAndView.addObject("user", user);
-        modelAndView.setViewName("register");
-        return modelAndView;
+        model.addAttribute("user", user);
+        return "register";
 	}
 	
 	@PostMapping("/register")
@@ -72,14 +72,15 @@ public class UserController {
 	}
 	
 	@GetMapping("/home")
-	public ModelAndView home(){
-		ModelAndView modelAndView = new ModelAndView();
-		int inactive = userService.findAllUserByActive(0).size();
+	public String home(Model model){
+		int inactive = userService.findAllUserByActive(false).size();
 		int alluser = userService.findAllUser().size();
-		modelAndView.addObject("pendingUser", inactive);
-		modelAndView.addObject("allUser", alluser);
-        modelAndView.setViewName("home");
-        return modelAndView;
+		int allproduct = productService.findAllProduct().size();
+		
+		model.addAttribute("pendingUser", inactive);
+		model.addAttribute("allUser", alluser);
+		model.addAttribute("allProduct", allproduct);
+        return "home";
     }
 	
 	@GetMapping("/admin/users")
@@ -105,12 +106,24 @@ public class UserController {
 	public String users(@PathVariable String id, Model model){
 		User user = userService.findUserById(Long.parseLong(id));
 		List<Role> roles = roleService.findAllRole();
-		
 		model.addAttribute("user", user);
-		model.addAttribute("roles", roles);
+		model.addAttribute("roleList", roles);
 		
 		return "admin/useredit";
     }
+	
+	@PostMapping("/admin/users/edit/submit")
+	public String updateUser(User user, BindingResult bindingResult) {
+		if (!bindingResult.hasErrors()) {
+			String result = userService.update(user);
+            
+            if(result.equalsIgnoreCase("success"))
+            	return "redirect:/admin/users";
+            	
+        }
+		
+		return "admin/useredit";
+	}
 	
 	@GetMapping("/access-denied")
 	public String accessDenied(){

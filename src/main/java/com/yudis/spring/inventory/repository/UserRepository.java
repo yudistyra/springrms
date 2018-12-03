@@ -10,5 +10,5 @@ import com.yudis.spring.inventory.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 	User findByUsername(String username);
-	List<User> findAllByActive(int active);
+	List<User> findAllByActive(boolean active);
 }

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{base}" th:with="currentPage='products'">
+<head>
+<title>Users</title>
+</head>
+<body>
+	<div layout:fragment="content">
+		<!-- User List -->
+		<div class="col-lg-12 mb-5">
+			<div class="card">
+				<div class="card-header">
+					<i class="fas fa-cubes"></i>&nbsp;&nbsp;<span
+						class="text-uppercase mb-0">Products</span>
+				</div>
+				<div class="card-body">
+					<form autocomplete="off" action="#" th:action="@{/products/submit}"
+				th:object="${product}" method="post" class="form-horizontal"
+				role="form">
+				
+				<div class="form-group mb-4">
+				<label for="name">Name</label>
+					<input type="text" th:field="*{name}" placeholder="Name"
+							class="form-control" required />
+					<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+							class="validation-message text-sm text-danger mt-2"></label> 
+				</div>
+				
+				<div class="form-group mb-4">
+				<label for="description">Description</label>
+					<input type="text" th:field="*{description}" placeholder="Description"
+							class="form-control" required />
+					<label th:if="${#fields.hasErrors('description')}" th:errors="*{description}"
+							class="validation-message text-sm text-danger mt-2"></label> 
+				</div>
+				
+				<div class="form-group mb-4">
+				<label for="price">Price</label>
+					<input type="number" th:field="*{price}" placeholder="Price"
+							class="form-control" min="1" required />
+					<label th:if="${#fields.hasErrors('price')}" th:errors="*{price}"
+							class="validation-message text-sm text-danger mt-2"></label> 
+				</div>
+              	<!-- 
+              	<div class="form-group mb-4 form-check">
+				    <label class="form-check-label" for="active">
+				    	<input type="checkbox" class="form-check-input" th:field="*{active}">Active
+				    </label>
+				</div>  -->
+				
+				<button type="submit" class="btn btn-danger shadow">Save</button>
+				<a href="products.html" th:href="@{/products}" role="button" class="btn btn-warning">Cancel</a>
+			</form>
+				</div>
+			</div>
+		</div>
+		<!-- End User List -->
+	</div>
+	
+</body>
+</html>

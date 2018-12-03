@@ -5,14 +5,9 @@
 	layout:decorate="~{base}" th:with="currentPage='users'">
 <head>
 <title>Users</title>
-<th:block layout:fragment="customcss">
-	<!-- DataTables -->
-	<link rel="stylesheet"
-		>
 	<!-- Select2 -->
   <link rel="stylesheet" href="assets/bower_components/" th:href="@{/assets/vendor/select2/css/select2.min.css}">
   <link rel="stylesheet" th:href="@{/assets/vendor/select2/css/select2-bootstrap.min.css}">
-</th:block>
 
 </head>
 <body>
@@ -25,34 +20,46 @@
 						class="text-uppercase mb-0">Users</span>
 				</div>
 				<div class="card-body">
-					<form autocomplete="off" action="#" th:action="@{/register}"
+					<form autocomplete="off" action="#" th:action="@{/admin/users/edit/submit}"
 				th:object="${user}" method="post" class="form-horizontal"
 				role="form">
-				<div class="form-group mb-4">
-					<input type="text" th:field="*{username}" placeholder="Username"
+				<input type="hidden" th:field="*{id}"
 							class="form-control" />
+				<div class="form-group mb-4">
+					<label for="username">Username</label>
+					<input type="text" th:field="*{username}" placeholder="Username"
+							class="form-control" readonly required />
 					<label th:if="${#fields.hasErrors('username')}" th:errors="*{username}"
 							class="validation-message text-sm text-danger mt-2"></label> 
 				</div>
 				
 				<div class="form-group mb-4">
+				<label for="name">Name</label>
 					<input type="text" th:field="*{name}" placeholder="Name"
-							class="form-control" />
+							class="form-control" readonly required />
 					<label th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
 							class="validation-message text-sm text-danger mt-2"></label> 
 				</div>
 				
 				<div class="form-group mb-4">
-					<select th:field="*{role}" class="form-control select2">
-					    <option th:each="r : ${roles}" th:value="${r.id}" th:text="${r.name}">
+					<label for="role">Role</label>
+					<select th:field="*{role}" class="form-control select2" id="test">
+						<option value=""></option>
+					    <option th:each="r : ${roleList}" th:value="${r.id}" th:text="${r.name}">
 					    </option>
 					</select>
 					<label th:if="${#fields.hasErrors('role')}" th:errors="*{role}"
 							class="validation-message text-sm text-danger mt-2"></label> 
 				</div>
               	
-				<button type="submit" class="btn btn-danger shadow px-5">Register</button>
-				<a href="register.html" th:href="@{/login}" role="button" class="btn btn-warning">Login Page</a>
+              	<div class="form-group mb-4 form-check">
+				    <label class="form-check-label" for="active">
+				    	<input type="checkbox" class="form-check-input" th:field="*{active}">Active
+				    </label>
+				</div>
+				
+				<button type="submit" class="btn btn-danger shadow">Save</button>
+				<a href="users.html" th:href="@{/admin/users}" role="button" class="btn btn-warning">Cancel</a>
 			</form>
 				</div>
 			</div>
@@ -65,11 +72,13 @@
 		<script th:src="@{/assets/vendor/select2/js/select2.min.js}"></script>
 		<script>
 		  $(document).ready(function() {
-			  $('.select2').select2({
+			  
+			  var sel = $('.select2').select2({
 		          theme: "bootstrap",
 		          allowClear: true,
-		          placeholder: "Choose Category"
+		          placeholder: "Choose Role"
 		      });
+			  
 		  });
 		</script>
 	</th:block>

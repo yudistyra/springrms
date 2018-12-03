@@ -36,7 +36,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 	    if (user == null) {
 	        throw new BadCredentialsException("Bad Credentialsssss");
 	    }
-	    if (user.getActive() == 0) {
+	    if (!user.isActive()) {
 	        throw new DisabledException("Username not active");
 	    }
 	    if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
@@ -47,7 +47,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
         
         Authentication auth = new UsernamePasswordAuthenticationToken(user,password,grantedAuthorities);
-	    //return new UsernamePasswordAuthenticationToken(user,password,grantedAuthorities);
         System.out.println(auth.getPrincipal());
         return auth;
 	}

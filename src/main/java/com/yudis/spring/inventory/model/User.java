@@ -34,9 +34,9 @@ public class User {
 	@Email(message = "*Please provide a valid Email")
 	@NotEmpty(message = "*Please provide an email")
 	private String email;
-	@NotEmpty(message = "P*lease provide a Name")
+	@NotEmpty(message = "*Please provide a Name")
 	private String name;
-	private int active;
+	private boolean active;
 	@Nullable
 	@OneToOne
 	private Role role;
