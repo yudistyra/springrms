@@ -43,7 +43,10 @@
 								<td th:switch="${w.active}"><span th:case="false"
 									class="badge badge-danger">Inactive</span> <span th:case="true"
 									class="badge badge-success">Active</span></td>
-								<td><a th:href="@{/warehouse/edit/{id}(id=${w.id})}"
+								<td><a th:href="@{/warehouse/detail/{id}(id=${w.id})}"
+									role="button" class="badge badge-info"> <i
+										class="fas fa-cubes p-1" title="Details"></i></a>
+									<a th:href="@{/warehouse/edit/{id}(id=${w.id})}"
 									role="button" class="badge badge-warning"> <i
 										class="fas fa-edit p-1"></i></a>
 										<a th:href="@{/warehouse/delete/{id}(id=${w.id})}"

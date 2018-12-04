@@ -1,10 +1,15 @@
 package com.yudis.spring.inventory.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 
@@ -32,4 +37,9 @@ public class Product {
 	private int price;
 	@Column(columnDefinition="INT DEFAULT 1")
 	private boolean active;
+	@OneToMany(
+			mappedBy="product",
+			fetch=FetchType.LAZY,
+			cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+	private List<ProductWarehouse> productWarehouse;
 }

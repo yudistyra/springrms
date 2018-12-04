@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{base}" th:with="currentPage='warehouse'">
+<head>
+<title>Warehouse Detail</title>
+<!-- DataTables -->
+<link rel="stylesheet"
+	th:href="@{/assets/vendor/datatables/datatables.min.css}">
+</head>
+<body>
+	<div layout:fragment="content">
+		<!-- User List -->
+		<div class="col-lg-12 mb-5">
+			<div class="card">
+				<div class="card-header">
+					<i class="fas fa-warehouse"></i>&nbsp;&nbsp;<span
+						class="text-uppercase mb-0">Warehouse Detail</span>
+				</div>
+				<div class="card-body">
+				<div class="text-center">
+					<a href="addproductwarehouse.html" th:href="@{/warehouse/detail/{id}/addproduct(id=${warehouseId})}" role="button" class="btn btn-primary">
+						<i class="fas fa-plus-circle mr-2"></i>Add Product</a>
+				</div>
+					<table id="warehouseTable" class="table">
+						<thead>
+							<tr>
+								<th>Product ID</th>
+								<th>Product Name</th>
+								<th>Transaction Date</th>
+								<th>Qty</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="w: ${warehouseProduct}">
+								<td th:text="${w.product.id}"></td>
+								<td th:text="${w.product.name}"></td>
+								<td th:text="${w.transDate}"></td>
+								<td th:text="${w.qty}"></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<!-- End User List -->
+	</div>
+
+	<th:block layout:fragment="scripts">
+		<!-- DataTables -->
+		<script th:src="@{/assets/vendor/datatables/datatables.min.js}"></script>
+		<script>
+			$(function() {
+				$('#warehouseTable').DataTable({
+					"columnDefs" : [ {
+						"targets" : [ 3 ], //first column / numbering column
+						"orderable" : false, //set not orderable
+					}, ],
+				});
+			})
+		</script>
+	</th:block>
+</body>
+</html>

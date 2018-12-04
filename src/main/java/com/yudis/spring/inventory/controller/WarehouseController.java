@@ -12,7 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.yudis.spring.inventory.model.ProductWarehouse;
 import com.yudis.spring.inventory.model.Warehouse;
+import com.yudis.spring.inventory.service.ProductService;
+import com.yudis.spring.inventory.service.TransactionService;
 import com.yudis.spring.inventory.service.WarehouseService;
 
 @Controller
@@ -20,6 +23,10 @@ public class WarehouseController {
 
 	@Autowired
 	private WarehouseService warehouseService;
+	@Autowired
+	private TransactionService transService;
+	@Autowired
+	private ProductService productService;
 	
 	@GetMapping("/warehouse")
 	public String warehouses(Model model) {
@@ -74,5 +81,35 @@ public class WarehouseController {
 		}
 		
 		return "redirect:/warehouse";
+	}
+	
+	@GetMapping("/warehouse/detail/{id}")
+	public String warehouseDetails(@PathVariable String id, Model model) {
+		List<ProductWarehouse> details = transService.getAllProductByWarehouse(Integer.parseInt(id));
+		model.addAttribute("warehouseId", id);
+		model.addAttribute("warehouseProduct", details);
+		return "warehouse/detail/list";
+	}
+	
+	@GetMapping("/warehouse/detail/{id}/addproduct")
+	public String warehouseAddProduct(@PathVariable String id, Model model) {	
+		model.addAttribute("warehouseId", id);
+		model.addAttribute("productList", productService.findAllProduct());
+		model.addAttribute("productWarehouse", new ProductWarehouse());
+		
+		return "warehouse/detail/addproduct";
+	}
+	
+	@PostMapping("warehouse/detail/addproduct/submit")
+	public String saveProductWarehouse(ProductWarehouse productWarehouse, BindingResult binding, Model model) {
+		
+		if (!binding.hasErrors()) {
+			String result = transService.addWarehouseStock(productWarehouse);
+            if(result.equalsIgnoreCase("success")) {
+        		return "redirect:/warehouse/detail/" + productWarehouse.getWarehouse().getId();
+            }
+        } 
+		
+		return "warehouse/detail/" + productWarehouse.getWarehouse().getId() + "/addproduct";
 	}
 }
