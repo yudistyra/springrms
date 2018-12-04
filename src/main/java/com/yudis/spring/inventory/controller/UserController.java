@@ -20,6 +20,7 @@ import com.yudis.spring.inventory.model.User;
 import com.yudis.spring.inventory.service.ProductService;
 import com.yudis.spring.inventory.service.RoleService;
 import com.yudis.spring.inventory.service.UserService;
+import com.yudis.spring.inventory.service.WarehouseService;
 
 @Controller
 public class UserController {
@@ -30,6 +31,8 @@ public class UserController {
 	private RoleService roleService;
 	@Autowired
 	private ProductService productService;
+	@Autowired
+	private WarehouseService warehouseService;
 	
 	@GetMapping("/login")
 	public String login(){
@@ -76,10 +79,12 @@ public class UserController {
 		int inactive = userService.findAllUserByActive(false).size();
 		int alluser = userService.findAllUser().size();
 		int allproduct = productService.findAllProduct().size();
+		int allwarehouse = warehouseService.findAll().size(); 
 		
 		model.addAttribute("pendingUser", inactive);
 		model.addAttribute("allUser", alluser);
 		model.addAttribute("allProduct", allproduct);
+		model.addAttribute("allWarehouse", allwarehouse);
         return "home";
     }
 	
