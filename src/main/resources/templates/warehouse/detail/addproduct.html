@@ -24,9 +24,12 @@
 				th:object="${productWarehouse}" method="post" class="form-horizontal"
 				role="form">
 				
-				<input type="text" th:value="${warehouseId}" name="warehouse"
+				<div class="form-group mb-4" th:if="${paramError}">
+				    <p style="font-size: 20; color: #FF1C19;" th:text="${errorMessage}">Wrong input!</p>
+			  	</div>
+				<input type="hidden" th:field="*{warehouse}"
 							class="form-control" />
-							
+				
 				<div class="form-group mb-4">
 					<label for="product">Product</label>
 					<select th:field="*{product}" class="form-control select2" id="product">

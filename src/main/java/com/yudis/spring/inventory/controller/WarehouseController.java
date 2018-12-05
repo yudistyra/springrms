@@ -1,5 +1,6 @@
 package com.yudis.spring.inventory.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -9,13 +10,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.yudis.spring.inventory.model.ProductWarehouse;
 import com.yudis.spring.inventory.model.Warehouse;
 import com.yudis.spring.inventory.service.ProductService;
-import com.yudis.spring.inventory.service.TransactionService;
+import com.yudis.spring.inventory.service.ProductWarehouseService;
 import com.yudis.spring.inventory.service.WarehouseService;
 
 @Controller
@@ -24,7 +27,7 @@ public class WarehouseController {
 	@Autowired
 	private WarehouseService warehouseService;
 	@Autowired
-	private TransactionService transService;
+	private ProductWarehouseService transService;
 	@Autowired
 	private ProductService productService;
 	
@@ -92,24 +95,55 @@ public class WarehouseController {
 	}
 	
 	@GetMapping("/warehouse/detail/{id}/addproduct")
-	public String warehouseAddProduct(@PathVariable String id, Model model) {	
+	public String warehouseAddProduct(@PathVariable String id, Model model, @ModelAttribute("errorMessage") String errorMessage) {	
 		model.addAttribute("warehouseId", id);
 		model.addAttribute("productList", productService.findAllProduct());
-		model.addAttribute("productWarehouse", new ProductWarehouse());
+		
+		Warehouse w = warehouseService.findById(Integer.parseInt(id));
+		ProductWarehouse pw = new ProductWarehouse();
+		pw.setWarehouse(w);		
+		model.addAttribute("productWarehouse", pw);
+		if(!errorMessage.isEmpty()) {
+			System.out.println(errorMessage);
+			model.addAttribute("paramError", true);
+			model.addAttribute("errorMessage", errorMessage);
+		}
 		
 		return "warehouse/detail/addproduct";
 	}
 	
 	@PostMapping("warehouse/detail/addproduct/submit")
-	public String saveProductWarehouse(ProductWarehouse productWarehouse, BindingResult binding, Model model) {
+	public String saveProductWarehouse(@Valid ProductWarehouse productWarehouse, BindingResult binding, RedirectAttributes redirectAttr, Model model) {
 		
-		if (!binding.hasErrors()) {
+		if (binding.hasErrors()) {
+			model.addAttribute("warehouseId", productWarehouse.getWarehouse().getId());
+			model.addAttribute("productList", productService.findAllProduct());
+			return "warehouse/detail/addproduct";
+		}
+		else {
 			String result = transService.addWarehouseStock(productWarehouse);
             if(result.equalsIgnoreCase("success")) {
         		return "redirect:/warehouse/detail/" + productWarehouse.getWarehouse().getId();
             }
+            else {
+            	//redirectAttr.addAttribute("errorMessage", result);
+            	redirectAttr.addFlashAttribute("errorMessage", result);
+            }
         } 
 		
-		return "warehouse/detail/" + productWarehouse.getWarehouse().getId() + "/addproduct";
+		return "redirect:/warehouse/detail/" + productWarehouse.getWarehouse().getId() + "/addproduct";
+	}
+	
+	@GetMapping("warehouse/detail/delete/{id}")
+	public String deleteProductWarehouse(@PathVariable String id, Model model) {
+		ProductWarehouse pw = transService.findById(Long.parseLong(id));
+		Integer warehouseId = pw.getWarehouse().getId();
+		String result = transService.deleteWarehouseStock(Long.parseLong(id));
+		
+		if(result.equalsIgnoreCase("success")) {
+			return "redirect:/warehouse";
+		}
+		
+		return "redirect:/warehouse/detail/" + warehouseId;
 	}
 }

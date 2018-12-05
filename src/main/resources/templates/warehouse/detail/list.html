@@ -30,6 +30,7 @@
 								<th>Product Name</th>
 								<th>Transaction Date</th>
 								<th>Qty</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -38,6 +39,10 @@
 								<td th:text="${w.product.name}"></td>
 								<td th:text="${w.transDate}"></td>
 								<td th:text="${w.qty}"></td>
+								<td>
+									<a th:href="@{/warehouse/detail/delete/{id}(id=${w.id})}"
+									role="button" class="badge badge-danger" onclick="if (!confirm('Are you sure want to delete this product?')) return false;"> <i
+										class="fas fa-trash p-1"></i></a></td>
 							</tr>
 						</tbody>
 					</table>

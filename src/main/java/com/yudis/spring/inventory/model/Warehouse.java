@@ -16,6 +16,7 @@ import groovy.transform.builder.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
 @Builder
@@ -38,6 +39,7 @@ public class Warehouse {
 			mappedBy="warehouse",
 			fetch=FetchType.LAZY,
 			cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+	@ToString.Exclude
 	private List<ProductWarehouse> productWarehouse;
 	
 }
